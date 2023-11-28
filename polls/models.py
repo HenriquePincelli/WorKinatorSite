@@ -140,6 +140,7 @@ class Consulta(models.Model):
     IDConsulta = models.AutoField(primary_key=True)
     IDPaciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     IDProfissional = models.ForeignKey(ProfissionalSaude, on_delete=models.CASCADE)
+    NomeCompleto = models.CharField(max_length=255)
     DataHoraConsulta = models.DateTimeField()
     opcoesAtendimento = (
         ("presencial", "Presencial"),

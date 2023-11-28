@@ -37,7 +37,7 @@ def Login(request):
         else:
             messages.error(request, 'Ops!\n Parece que você ainda não está cadastrado')
 
-    return render(request, "polls/login.html")
+    return render(request, "login/login2.html")
 
 #Register POST's
 def CadastroProfissionalSaude(request):
@@ -85,7 +85,7 @@ def CadastroProfissionalSaude(request):
             return render(request, "polls/login.html", {"form": form})
     else:
         form = CadastroProfissionalSaudeForm()
-    return render(request, "polls/cadastroprofissionalsaude.html", {"form": form})
+    return render(request, "cadastros/cadastroprofissionalsaude.html", {"form": form})
 
 @login_required
 def CadastroPaciente(request):
@@ -128,6 +128,7 @@ def CadastroConsulta(request):
             consulta = Consulta(
                 IDPaciente = paciente,
                 IDProfissional = profissionalSaude,
+                NomeCompleto = paciente.NomeCompleto,
                 DataHoraConsulta = request.POST["DataHoraConsulta"],
                 Atendimento = request.POST["Atendimento"],
                 Valor = request.POST["Valor"],
@@ -141,7 +142,7 @@ def CadastroConsulta(request):
             return redirect("workinator:GetConsultasProfissional")
             #return JsonResponse({"status": True, "msg": "Consulta adicionada com sucesso."})
 
-    return render(request, "polls/cadastroconsulta.html", {"form": form})
+    return render(request, "cadastros/cadastroconsulta.html", {"form": form})
 
 #Register PUT's
 @login_required
@@ -360,7 +361,7 @@ def GetPaciente(request):
 
         return JsonResponse(pacienteData)
 
-    return render(request, "polls/getpaciente.html", {"form": form})
+    return render(request, "home/getpaciente.html", {"form": form})
 
 @login_required
 def GetPacientes(request):
@@ -397,11 +398,12 @@ def GetConsulta(request):
 
         return JsonResponse(consultaData)
 
-    return render(request, "polls/getconsulta.html", {"form": form})
+    return render(request, "home/getconsulta.html", {"form": form})
 
 @login_required
 def GetConsultasPaciente(request):
     form = GetConsultasPacienteForm()
+    #context["form"] = form
     if request.method == 'POST':
         consulta = Consulta.objects.filter(IDPaciente=request.POST["IDPaciente"], Active=True)
         consultaData = [{
@@ -412,12 +414,14 @@ def GetConsultasPaciente(request):
             "Cor": item.Cor
         } for item in consulta]
 
-        return JsonResponse(consultaData, safe=False)
+        #return JsonResponse(consultaData, safe=False)
 
-    return render(request, "polls/getconsultaspaciente.html", {"form": form})
+    #return render(request, "polls/getconsultaspaciente.html", context)
+    return consultaData
 
 @login_required
 def GetPacientesProfissional(request):
+    context = {}
     #form = GetPacientesProfissionalForm()
     #if request.method == 'POST':
     paciente = Paciente.objects.filter(IDProfissional=request.user.id, Active=True)
@@ -434,13 +438,17 @@ def GetPacientesProfissional(request):
         "Cor": item.Cor
     } for item in paciente]
 
-    return JsonResponse(pacienteData, safe=False)
-    #return render(request, "polls/getpacientesprofissional.html")
+    #return JsonResponse(pacienteData, safe=False)
+
+    #return render(request, "polls/home.html", context)
 
 @login_required
 def GetConsultasProfissional(request):
+    context = {}
     consulta = Consulta.objects.filter(IDProfissional=request.user.id, Active=True)
+    paciente = Paciente.objects.filter(IDProfissional=request.user.id, Active=True)
     consultaData = [{
+        "NomeCompleto": item.NomeCompleto,
         "DataHoraConsulta": item.DataHoraConsulta,
         "Atendimento": item.Atendimento,
         "Valor": item.Valor,
@@ -448,5 +456,8 @@ def GetConsultasProfissional(request):
         "Cor": item.Cor
     } for item in consulta]
 
-    return JsonResponse(consultaData, safe=False)
+    #return JsonResponse(consultaData, safe=False)
+    context["consulta"] = consultaData
+    return render(request, "home/home.html", context)
+
     #return render(request, "polls/getconsultasprofissional.html")
