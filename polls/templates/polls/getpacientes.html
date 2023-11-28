@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Pacientes</title>
+</head>
+<body>
+    <h2>Lista de Pacientes</h2>
+    <ul>
+        {% for paciente in pacientes %}
+            <li>{{ paciente.NomeCompleto }} - {{ paciente.Cor }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

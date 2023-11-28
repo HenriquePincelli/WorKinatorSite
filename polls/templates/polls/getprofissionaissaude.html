@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Profissionais de Saúde</title>
+</head>
+<body>
+    <h2>Lista de Profissionais de Saúde</h2>
+    <ul>
+        {% for profissional in profissionais %}
+            <li>{{ profissional.NomeCompleto }} - {{ profissional.CodigoProfissional }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
