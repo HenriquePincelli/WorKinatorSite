@@ -33,21 +33,23 @@
 
                 <div class="row">
 
-                    <div class="col fields">
-                        <label for=""> Valor</label>
+                    <div class="fields">
+                        <label for="Atendimento"> Tipo de atendimento</label>
                         {% render_field form.Atendimento id="Atendimento" type="text" class="form-control" placeholder="Atendimento"%}
+    
                     </div>
-                    <div class="col fields">
-                        <label for="">Tipo atendimento</label>
+                    
+                    <div class="fields">
+                        <label for=""> Valor</label>
                         {% render_field form.Valor id="Valor" type="number" class="form-control" placeholder="Valor"%}
                     </div>
 
                 </div>
 
                 <div class="fields">
+                    <label for="">Deixe aqui um comentário</label>
                     {% render_field form.Comentarios id="Comentarios" type="text" class="form-control" placeholder="Comentarios"%}
                 </div>
-                <!-- {% render_field form.Cor id="Cor" type="color" class="form-control" placeholder="Cor"%} -->
               
                 <div style="margin-top: 0.1rem; padding: 0.7rem;" class="row">
                     

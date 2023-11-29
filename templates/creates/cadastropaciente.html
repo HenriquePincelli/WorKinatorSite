@@ -12,12 +12,12 @@
 
 {% block content %}
     <div class="col-md-6">
-        <form method="POST" action="{% url 'workinator:CadastroProfissionalSaude' %}">
+        <form method="POST" action="{% url 'workinator:CadastroPaciente' %}">
             {% csrf_token %}
 
             <div class="card">
                 <div class="card-body">
-                    <h1>Cadastro Paciente</h1>
+                    <h1>Cadastrar Paciente</h1>
                 
                     
                     <div class="row">

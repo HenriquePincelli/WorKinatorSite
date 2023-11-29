@@ -129,7 +129,7 @@ class CadastroPacienteForm(ModelForm):
         model = Paciente
         fields = ["NomeCompleto", "Telefone", "DataNascimento", "Cidade",
                   "Deficiencia", "Remedio", "Enfermidades", "Encaminhamento",
-                  "EstadoCivil", "Cor"]
+                  "EstadoCivil"]
 
 class CadastroConsulta(forms.Form):
 
@@ -152,11 +152,11 @@ class CadastroConsultaForm(ModelForm):
     class Meta:
         model = Consulta
         fields = ["IDPaciente", "DataHoraConsulta", "Atendimento", "Valor",
-                  "Comentarios", "Cor"]
+                  "Comentarios"]
 
     def __init__(self, *args, **kwargs):
         super(CadastroConsultaForm, self).__init__(*args, **kwargs)
-        self.fields['IDPaciente'].queryset = Paciente.objects.all()
+        self.fields['IDPaciente'].queryset = Paciente.objects.filter(Active=True).all()
         self.fields['IDPaciente'].to_field_name = 'NomeCompleto'
 
 #Register PUT's
@@ -261,7 +261,7 @@ class AtualizaPacienteForm(ModelForm):
         model = Paciente
         fields = ["IDPaciente", "NomeCompleto", "Telefone", "DataNascimento",
                   "Cidade", "Deficiencia", "Remedio", "Enfermidades",
-                  "Encaminhamento", "EstadoCivil", "Cor"]
+                  "Encaminhamento", "EstadoCivil"]
 
 class AtualizaConsulta(forms.Form):
 
@@ -283,7 +283,7 @@ class AtualizaConsultaForm(ModelForm):
     class Meta:
         model = Consulta
         fields = ["IDConsulta", "DataHoraConsulta", "Atendimento", "Valor",
-                  "Comentarios", "Cor"]
+                  "Comentarios"]
 
 class AtualizaConsultaObservacao(forms.Form):
 
@@ -296,7 +296,7 @@ class AtualizaConsultaObservacaoForm(ModelForm):
 
     class Meta:
         model = Consulta
-        fields = ["IDConsulta", "Comentarios", "Cor"]
+        fields = ["IDConsulta", "Comentarios"]
 
 #Register DELETE's
 class DeleteProfissionalSaude(forms.Form):

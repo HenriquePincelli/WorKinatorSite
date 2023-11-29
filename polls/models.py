@@ -135,6 +135,7 @@ class Paciente(models.Model):
     CreatedAt = models.DateTimeField()
     UpdatedAt = models.DateTimeField()
     Active = models.BooleanField()
+    IDReference = models.TextField(max_length=255)
 
     def __str__(self):
         return self.NomeCompleto
@@ -158,3 +159,4 @@ class Consulta(models.Model):
     CreatedAt = models.DateTimeField()
     UpdatedAt = models.DateTimeField()
     Active = models.BooleanField()
+    IDReference = models.TextField(max_length=255)

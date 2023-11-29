@@ -61,7 +61,8 @@ def CadastroProfissionalSaude(request):
             userData = {
                 "email":request.POST["email"],
                 "username":request.POST["username"],
-                "password":request.POST["senha"]
+                "password":request.POST["senha"],
+                "is_superuser":True
             }
             user = User.objects.create_user(**userData)
 
@@ -109,10 +110,10 @@ def CadastroPaciente(request):
                 Enfermidades = request.POST["Enfermidades"],
                 Encaminhamento = request.POST["Encaminhamento"],
                 EstadoCivil = request.POST["EstadoCivil"],
-                Cor = request.POST["Cor"],
                 CreatedAt = datetime.now(saoPauloTime),
                 UpdatedAt = datetime.now(saoPauloTime),
-                Active = True
+                Active = True,
+                IDReference = profissionalSaude.User_id
             )
             paciente.save()
             return redirect("workinator:GetPacientesProfissional")
@@ -137,10 +138,10 @@ def CadastroConsulta(request):
                 Atendimento = request.POST["Atendimento"],
                 Valor = request.POST["Valor"],
                 Comentarios = request.POST["Comentarios"],
-                Cor = request.POST["Cor"],
                 CreatedAt = datetime.now(saoPauloTime),
                 UpdatedAt = datetime.now(saoPauloTime),
-                Active = True
+                Active = True,
+                IDReference = profissionalSaude.User_id
             )
             consulta.save()
             return redirect("workinator:GetConsultasProfissional")
@@ -155,7 +156,7 @@ def AtualizaProfissionalSaude(request):
     if request.method == 'POST':
         form = AtualizaProfissionalSaudeForm(request.POST)
         if form.is_valid():
-            profissional_saude = get_object_or_404(ProfissionalSaude, IDProfissional=request.user.id, Active=True)
+            profissional_saude = get_object_or_404(ProfissionalSaude, User_id=request.user.id, Active=True)
 
             profissional_saude.CodigoProfissional = request.POST["CodigoProfissional"]
             profissional_saude.NomeCompleto = request.POST["NomeCompleto"]
@@ -193,7 +194,6 @@ def AtualizaPaciente(request):
             paciente.Enfermidades = request.POST["Enfermidades"]
             paciente.Encaminhamento = request.POST["Encaminhamento"]
             paciente.EstadoCivil = request.POST["EstadoCivil"]
-            paciente.Cor = request.POST["Cor"]
             paciente.UpdatedAt = datetime.now(saoPauloTime)
             paciente.save()
 
@@ -216,7 +216,6 @@ def AtualizaConsulta(request):
             consulta.Atendimento = request.POST["Atendimento"]
             consulta.Valor = request.POST["Valor"]
             consulta.Comentarios = request.POST["Comentarios"]
-            consulta.Cor = request.POST["Cor"]
             consulta.UpdatedAt = datetime.now(saoPauloTime)
             consulta.save()
 
@@ -236,7 +235,6 @@ def AtualizaConsultaObservacao(request):
             consulta = get_object_or_404(Consulta, IDConsulta=request.POST["IDConsulta"], Active=True)
 
             consulta.Comentarios = request.POST["Comentarios"]
-            consulta.Cor = request.POST["Cor"]
             consulta.UpdatedAt = datetime.now(saoPauloTime)
             consulta.save()
 
@@ -317,7 +315,7 @@ def DeleteConsulta(request):
 @login_required
 def GetProfissionalSaude(request):
     context = {}
-    profissional = ProfissionalSaude.objects.filter(IDProfissional=request.user.id, Active=True)
+    profissional = ProfissionalSaude.objects.filter(User_id=request.user.id, Active=True)
     profissionalData = [{
         "CodigoProfissional": item.CodigoProfissional,
         "NomeCompleto": item.NomeCompleto,
@@ -369,8 +367,7 @@ def GetPaciente(request):
             "Remedio": paciente.Remedio,
             "Enfermidades": paciente.Enfermidades,
             "Encaminhamento": paciente.Encaminhamento,
-            "EstadoCivil": paciente.EstadoCivil,
-            "Cor": paciente.Cor
+            "EstadoCivil": paciente.EstadoCivil
         }
         context["paciente"] = pacienteData
 
@@ -391,8 +388,7 @@ def GetPacientes(request):
             "Remedio": item.Remedio,
             "Enfermidades": item.Enfermidades,
             "Encaminhamento": item.Encaminhamento,
-            "EstadoCivil": item.EstadoCivil,
-            "Cor": item.Cor
+            "EstadoCivil": item.EstadoCivil
         } for item in paciente]
 
     return JsonResponse(pacienteData, safe=False)
@@ -410,8 +406,7 @@ def GetConsulta(request):
             "DataHoraConsulta": consulta.DataHoraConsulta,
             "Atendimento": consulta.Atendimento,
             "Valor": consulta.Valor,
-            "Comentarios": consulta.Comentarios,
-            "Cor": consulta.Cor
+            "Comentarios": consulta.Comentarios
         }
         context["consulta"] = consultaData
 
@@ -429,8 +424,7 @@ def GetConsultasPaciente(request):
             "DataHoraConsulta": item.DataHoraConsulta,
             "Atendimento": item.Atendimento,
             "Valor": item.Valor,
-            "Comentarios": item.Comentarios,
-            "Cor": item.Cor
+            "Comentarios": item.Comentarios
         } for item in consulta]
 
         #return JsonResponse(consultaData, safe=False)
@@ -443,7 +437,7 @@ def GetPacientesProfissional(request):
     context = {}
     #form = GetPacientesProfissionalForm()
     #if request.method == 'POST':
-    paciente = Paciente.objects.filter(IDProfissional=request.user.id, Active=True)
+    paciente = Paciente.objects.filter(IDReference=request.user.id, Active=True)
     pacienteData = [{
         "IDPaciente": item.IDPaciente,
         "NomeCompleto": item.NomeCompleto,
@@ -454,8 +448,7 @@ def GetPacientesProfissional(request):
         "Remedio": item.Remedio,
         "Enfermidades": item.Enfermidades,
         "Encaminhamento": item.Encaminhamento,
-        "EstadoCivil": item.EstadoCivil,
-        "Cor": item.Cor
+        "EstadoCivil": item.EstadoCivil
     } for item in paciente]
     context["paciente"] = pacienteData
     return render(request, "reads/getpacientesprofissional.html", context)
@@ -467,15 +460,14 @@ def GetPacientesProfissional(request):
 @login_required
 def GetConsultasProfissional(request):
     context = {}
-    consulta = Consulta.objects.filter(IDProfissional=request.user.id, Active=True)
+    consulta = Consulta.objects.filter(IDReference=request.user.id, Active=True)
     consultaData = [{
         "IDConsulta": item.IDConsulta,
         "NomeCompleto": item.NomeCompleto,
         "DataHoraConsulta": item.DataHoraConsulta,
         "Atendimento": item.Atendimento,
         "Valor": item.Valor,
-        "Comentarios": item.Comentarios,
-        "Cor": item.Cor
+        "Comentarios": item.Comentarios
     } for item in consulta]
 
     #return JsonResponse(consultaData, safe=False)
