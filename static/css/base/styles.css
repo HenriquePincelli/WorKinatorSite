@@ -1,1 +1,16 @@
 label{color: rgb(255, 89, 0);}
+
+#container {
+    min-height: 100%;
+    position: relative;
+    margin-top: 8rem;
+    margin-bottom: -0.02rem; /* A altura do seu rodapé */
+  }
+  
+  #content{
+    margin-bottom: 5rem;
+  }
+
+  .fields{
+    margin-top: 1rem;
+  }

@@ -19,9 +19,28 @@
     <script src='{% static "js/base/main.js" %}' language="JavaScript" type="text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}
-        {% endblock %}</title>
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+
 </head>
+
+{% if user.is_authenticated %}
+<div class="container mt-4">
+    <div class="row">
+      <div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'workinator:Logout' %}" class="btn btn-danger">Logout</a>
+        {% endif %}
+        <a href="{% url 'workinator:GetProfissionalSaude' %}" class="btn btn-primary">Ver Perfil</a>
+      </div>
+    </div>
+  </div>
+  <hr>
+{% endif %}
+
+
 <body>
     <div id="container">
         <div id="content">
