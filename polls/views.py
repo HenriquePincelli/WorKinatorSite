@@ -129,7 +129,7 @@ def CadastroConsulta(request):
         form = CadastroConsultaForm(request.POST)
         if form.is_valid():
             profissionalSaude = get_object_or_404(ProfissionalSaude, User=request.user, Active=True)
-            paciente = get_object_or_404(Paciente, IDProfissional=profissionalSaude.IDProfissional, NomeCompleto=request.POST["IDPaciente"], Active=True)
+            paciente = get_object_or_404(Paciente, IDReference=profissionalSaude.User_id, NomeCompleto=request.POST["IDPaciente"], Active=True)
             consulta = Consulta(
                 IDPaciente = paciente,
                 IDProfissional = profissionalSaude,
