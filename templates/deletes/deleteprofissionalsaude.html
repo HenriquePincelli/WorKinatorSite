@@ -14,10 +14,16 @@
         <title>Document</title>
     </head>
     <body>
-        <form method="POST" action="{% url 'workinator:GetPacientesProfissional' %}">
+        <form method="POST" action="{% url 'workinator:DeleteProfissionalSaude' %}">
             {% csrf_token %}
-            {% render_field form.IDProfissional id="IDProfissional" type="number" class="form-control" placeholder="IDProfissional"%}
             <input type="submit" value="Submit">
         </form>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{% url 'workinator:GetConsultasProfissional' %}" class="btn btn-warning">Voltar</a>
+                </div>
+            </div>
+        </div>
 </body>
 </html>

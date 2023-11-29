@@ -31,13 +31,17 @@ def Login(request):
             user = auth.authenticate(request, username=login, password=senha)
             if user is not None:
                 auth.login(request, user)
-                return redirect("workinator:GetConsultasPaciente")
+                return redirect("workinator:GetConsultasProfissional")
             else:
                 messages.error(request, f'Cuidado, {login}!\n Parece que seu usuário ou senha está inválido,\n verifique e tente novamente.')
         else:
             messages.error(request, 'Ops!\n Parece que você ainda não está cadastrado')
 
-    return render(request, "login/login2.html")
+    return render(request, "login/login.html")
+
+def Logout(request):
+    auth.logout(request)
+    return redirect('workinator:Login')
 
 #Register POST's
 def CadastroProfissionalSaude(request):
@@ -82,10 +86,10 @@ def CadastroProfissionalSaude(request):
             #return redirect('workinator:GetProfissionalSaude')
             #return JsonResponse({"status": True, "msg": "Registro adicionado com sucesso."})
             #return redirect("workinator:Login")
-            return render(request, "polls/login.html", {"form": form})
+            return render(request, "login/login.html", {"form": form})
     else:
         form = CadastroProfissionalSaudeForm()
-    return render(request, "cadastros/cadastroprofissionalsaude.html", {"form": form})
+    return render(request, "creates/cadastroprofissionalsaude.html", {"form": form})
 
 @login_required
 def CadastroPaciente(request):
@@ -115,7 +119,7 @@ def CadastroPaciente(request):
             #return JsonResponse({"status": True, "msg": "Paciente adicionado com sucesso."})
     else:
         form = CadastroPacienteForm()
-    return render(request, "polls/cadastropaciente.html", {'form': form})
+    return render(request, "creates/cadastropaciente.html", {'form': form})
 
 @login_required
 def CadastroConsulta(request):
@@ -124,7 +128,7 @@ def CadastroConsulta(request):
         form = CadastroConsultaForm(request.POST)
         if form.is_valid():
             profissionalSaude = get_object_or_404(ProfissionalSaude, User=request.user, Active=True)
-            paciente = get_object_or_404(Paciente, IDProfissional=profissionalSaude.IDProfissional, IDPaciente=request.POST["IDPaciente"], Active=True)
+            paciente = get_object_or_404(Paciente, IDProfissional=profissionalSaude.IDProfissional, NomeCompleto=request.POST["IDPaciente"], Active=True)
             consulta = Consulta(
                 IDPaciente = paciente,
                 IDProfissional = profissionalSaude,
@@ -142,7 +146,7 @@ def CadastroConsulta(request):
             return redirect("workinator:GetConsultasProfissional")
             #return JsonResponse({"status": True, "msg": "Consulta adicionada com sucesso."})
 
-    return render(request, "cadastros/cadastroconsulta.html", {"form": form})
+    return render(request, "creates/cadastroconsulta.html", {"form": form})
 
 #Register PUT's
 @login_required
@@ -165,12 +169,12 @@ def AtualizaProfissionalSaude(request):
             profissional_saude.UpdatedAt = datetime.now(saoPauloTime)
             profissional_saude.save()
 
-            return redirect("workinator:GetProfissionalSaude")
+            return redirect("workinator:GetConsultasProfissional")
             #return JsonResponse({"status": True, "msg": "Registro atualizado com sucesso."})
         else:
             return HttpResponseBadRequest("Erro nos dados enviados.")
 
-    return render(request, "polls/atualizaprofissionalsaude.html", {"form": form})
+    return render(request, "updates/atualizaprofissionalsaude.html", {"form": form})
 
 @login_required
 def AtualizaPaciente(request):
@@ -198,7 +202,7 @@ def AtualizaPaciente(request):
         else:
             return HttpResponseBadRequest("Erro nos dados enviados.")
 
-    return render(request, "polls/atualizapaciente.html", {"form": form})
+    return render(request, "updates/atualizapaciente.html", {"form": form})
 
 @login_required
 def AtualizaConsulta(request):
@@ -221,7 +225,7 @@ def AtualizaConsulta(request):
         else:
             return HttpResponseBadRequest("Erro nos dados enviados.")
 
-    return render(request, "polls/atualizaconsulta.html", {"form": form})
+    return render(request, "updates/atualizaconsulta.html", {"form": form})
 
 @login_required
 def AtualizaConsultaObservacao(request):
@@ -236,12 +240,12 @@ def AtualizaConsultaObservacao(request):
             consulta.UpdatedAt = datetime.now(saoPauloTime)
             consulta.save()
 
-            return redirect("workinator:GetConsultasPaciente")
+            return redirect("workinator:GetConsultasProfissional")
             #return JsonResponse({"status": True, "msg": "Registro atualizado com sucesso."})
         else:
             return HttpResponseBadRequest("Erro nos dados enviados.")
 
-    return render(request, "polls/atualizaconsultaobservacao.html", {"form": form})
+    return render(request, "updates/atualizaconsultaobservacao.html", {"form": form})
 
 #Register DELETE's
 @login_required
@@ -259,7 +263,7 @@ def DeleteProfissionalSaude(request):
         return redirect("workinator:GetProfissionalSaude")
         #return JsonResponse({"status": True, "msg": "Registro deletado com sucesso."})
 
-    return render(request, "polls/deleteprofissionalsaude.html")
+    return render(request, "deletes/deleteprofissionalsaude.html")
 
 @login_required
 def DeletePaciente(request):
@@ -278,7 +282,7 @@ def DeletePaciente(request):
         else:
             return HttpResponseBadRequest("Erro nos dados enviados.")
 
-    return render(request, "polls/deletepaciente.html", {"form": form})
+    return render(request, "deletes/deletepaciente.html", {"form": form})
 
 @login_required
 def DeleteConsulta(request):
@@ -297,11 +301,12 @@ def DeleteConsulta(request):
         else:
             return HttpResponseBadRequest("Erro nos dados enviados.")
 
-    return render(request, "polls/deleteconsulta.html", {"form": form})
+    return render(request, "deletes/deleteconsulta.html", {"form": form})
 
 #Register GET's
 @login_required
 def GetProfissionalSaude(request):
+    context = {}
     form = GetProfissionalSaudeForm()
     if request.method == "POST":
         profissionalSaude = get_object_or_404(ProfissionalSaude, IDProfissional=request.user.id, Active=True)
@@ -320,7 +325,7 @@ def GetProfissionalSaude(request):
 
         return JsonResponse(profissionalSaudeData)
 
-    return render(request, "polls/getprofissionalsaude.html", {"form": form})
+    return render(request, "reads/getprofissionalsaude.html", {"form": form})
 
 @login_required
 def GetProfissionaisSaude(request):
@@ -361,7 +366,7 @@ def GetPaciente(request):
 
         return JsonResponse(pacienteData)
 
-    return render(request, "home/getpaciente.html", {"form": form})
+    return render(request, "reads/getpaciente.html", {"form": form})
 
 @login_required
 def GetPacientes(request):
@@ -398,7 +403,7 @@ def GetConsulta(request):
 
         return JsonResponse(consultaData)
 
-    return render(request, "home/getconsulta.html", {"form": form})
+    return render(request, "reads/getconsulta.html", {"form": form})
 
 @login_required
 def GetConsultasPaciente(request):
@@ -426,6 +431,7 @@ def GetPacientesProfissional(request):
     #if request.method == 'POST':
     paciente = Paciente.objects.filter(IDProfissional=request.user.id, Active=True)
     pacienteData = [{
+        "IDPaciente": item.IDPaciente,
         "NomeCompleto": item.NomeCompleto,
         "Telefone": item.Telefone,
         "DataNascimento": item.DataNascimento,
@@ -437,6 +443,8 @@ def GetPacientesProfissional(request):
         "EstadoCivil": item.EstadoCivil,
         "Cor": item.Cor
     } for item in paciente]
+    context["paciente"] = pacienteData
+    return render(request, "reads/getpacientesprofissional.html", context)
 
     #return JsonResponse(pacienteData, safe=False)
 
@@ -446,8 +454,8 @@ def GetPacientesProfissional(request):
 def GetConsultasProfissional(request):
     context = {}
     consulta = Consulta.objects.filter(IDProfissional=request.user.id, Active=True)
-    paciente = Paciente.objects.filter(IDProfissional=request.user.id, Active=True)
     consultaData = [{
+        "IDConsulta": item.IDConsulta,
         "NomeCompleto": item.NomeCompleto,
         "DataHoraConsulta": item.DataHoraConsulta,
         "Atendimento": item.Atendimento,
@@ -458,6 +466,6 @@ def GetConsultasProfissional(request):
 
     #return JsonResponse(consultaData, safe=False)
     context["consulta"] = consultaData
-    return render(request, "home/home.html", context)
+    return render(request, "reads/home.html", context)
 
     #return render(request, "polls/getconsultasprofissional.html")

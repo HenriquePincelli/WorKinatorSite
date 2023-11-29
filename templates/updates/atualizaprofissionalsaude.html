@@ -27,5 +27,12 @@
             {% render_field form.FaixaHorario id="FaixaHorario" type="text" class="form-control" placeholder="Faixa de Horario"%}
             <input type="submit" value="Submit">
         </form>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{% url 'workinator:GetConsultasProfissional' %}" class="btn btn-warning">Voltar</a>
+                </div>
+            </div>
+        </div>
 </body>
 </html>

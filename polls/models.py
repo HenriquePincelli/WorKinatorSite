@@ -136,6 +136,9 @@ class Paciente(models.Model):
     UpdatedAt = models.DateTimeField()
     Active = models.BooleanField()
 
+    def __str__(self):
+        return self.NomeCompleto
+
 class Consulta(models.Model):
     IDConsulta = models.AutoField(primary_key=True)
     IDPaciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)

@@ -6,6 +6,7 @@ app_name = "workinator"
 
 urlpatterns = [
     path("login/", views.Login, name="Login"),
+    path("logout/", views.Logout, name="Logout"),
     path("cadastroprofissionalsaude/", views.CadastroProfissionalSaude, name="CadastroProfissionalSaude"),
     path("cadastropaciente/", views.CadastroPaciente, name="CadastroPaciente"),
     path("cadastroconsulta/", views.CadastroConsulta, name="CadastroConsulta"),

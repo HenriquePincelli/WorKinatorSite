@@ -147,11 +147,17 @@ class CadastroConsulta(forms.Form):
     Cor = ColorField()
 class CadastroConsultaForm(ModelForm):
 
-    IDPaciente = forms.IntegerField()
+    #IDPaciente = forms.IntegerField()
 
     class Meta:
         model = Consulta
-        fields = ["DataHoraConsulta", "Atendimento", "Valor", "Comentarios", "Cor"]
+        fields = ["IDPaciente", "DataHoraConsulta", "Atendimento", "Valor",
+                  "Comentarios", "Cor"]
+
+    def __init__(self, *args, **kwargs):
+        super(CadastroConsultaForm, self).__init__(*args, **kwargs)
+        self.fields['IDPaciente'].queryset = Paciente.objects.all()
+        self.fields['IDPaciente'].to_field_name = 'NomeCompleto'
 
 #Register PUT's
 class AtualizaProfissionalSaude(forms.Form):
