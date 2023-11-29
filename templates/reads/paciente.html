@@ -18,34 +18,44 @@
             <thead>
               <tr>
                 <th scope="col">IDPaciente</th>
-                <th scope="col">Paciente</th>
+                <th scope="col">NomeCompleto</th>
                 <th scope="col">Telefone</th>
-                <th scope="col">Data de Nascimento</th>
+                <th scope="col">DataNascimento</th>
+                <th scope="col">Cidade</th>
+                <th scope="col">Deficiencia</th>
+                <th scope="col">Remedio</th>
+                <th scope="col">Enfermidades</th>
+                <th scope="col">Encaminhamento</th>
+                <th scope="col">EstadoCivil</th>
+                <th scope="col">Cor</th>
               </tr>
             </thead>
             <tbody>
-              {% for pacient in paciente %}
                  <tr>
-                     <td>{{pacient.IDPaciente}}</td>
-                     <td>{{pacient.NomeCompleto}}</td>
-                     <td>{{pacient.Telefone}}</td>
-                     <td>{{pacient.DataNascimento}}</td>  
+                     <td>{{paciente.IDPaciente}}</td> 
+                     <td>{{paciente.NomeCompleto}}</td>
+                     <td>{{paciente.Telefone}}</td>
+                     <td>{{paciente.DataNascimento}}</td>
+                     <td>{{paciente.Cidade}}</td>  
+                     <td>{{paciente.Deficiencia}}</td>
+                     <td>{{paciente.Remedio}}</td>
+                     <td>{{paciente.Enfermidades}}</td>
+                     <td>{{paciente.Encaminhamento}}</td>
+                     <td>{{paciente.EstadoCivil}}</td>
+                     <td>{{paciente.Cor}}</td>
                 </tr>
-              {% endfor %}
             </tbody>
     </table>
     <div class="container mt-4">
       <div class="row">
           <div class="col-md-6">
-              <a href="{% url 'workinator:CadastroPaciente' %}" class="btn btn-success">Criar Paciente</a>
-              <a href="{% url 'workinator:GetPaciente' %}" class="btn btn-primary">Ver Paciente</a>
               <a href="{% url 'workinator:AtualizaPaciente' %}" class="btn btn-secondary">Editar Paciente</a>
               <a href="{% url 'workinator:DeletePaciente' %}" class="btn btn-danger">Excluir Paciente</a>
           </div>
           <div class="col-md-6">
-              <a href="{% url 'workinator:GetConsultasProfissional' %}" class="btn btn-warning">Voltar</a>
+              <a href="{% url 'workinator:GetPaciente' %}" class="btn btn-warning">Voltar</a>
           </div>
       </div>
-  </div>
+    </div>
 </body>
 </html>

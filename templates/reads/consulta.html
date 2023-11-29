@@ -17,41 +17,35 @@
         <table class="table table-dark">
             <thead>
               <tr>
-                <th scope="col">Código Profissional</th>
-                <th scope="col">Nome Completo</th>
-                <th scope="col">RG / CPF / CNPJ</th>
-                <th scope="col">Telefone</th>
-                <th scope="col">Data de Nascimento</th>
-                <th scope="col">Endereco do Consultorio</th>
+                <th scope="col">IDConsulta</th>
+                <th scope="col">NomeCompleto</th>
+                <th scope="col">DataHoraConsulta</th>
                 <th scope="col">Atendimento</th>
-                <th scope="col">Abordagem</th>
-                <th scope="col">Faixa de Horario</th>
+                <th scope="col">Valor</th>
+                <th scope="col">Comentarios</th>
+                <th scope="col">Cor</th>
               </tr>
             </thead>
             <tbody>
-              {% for prof in profissional %}
                  <tr>
-                     <td>{{prof.CodigoProfissional}}</td>
-                     <td>{{prof.NomeCompleto}}</td>
-                     <td>{{prof.RG_CPF_CNPJ}}</td>
-                     <td>{{prof.Telefone}}</td>  
-                     <td>{{prof.DataNascimento}}</td>
-                     <td>{{prof.EnderecoConsultorio}}</td>
-                     <td>{{prof.Atendimento}}</td>
-                     <td>{{prof.Abordagem}}</td>
-                     <td>{{prof.FaixaHorario}}</td>
+                     <td>{{consulta.IDConsulta}}</td>
+                     <td>{{consulta.NomeCompleto}}</td>
+                     <td>{{consulta.DataHoraConsulta}}</td>
+                     <td>{{consulta.Atendimento}}</td>  
+                     <td>{{consulta.Valor}}</td>
+                     <td>{{consulta.Comentarios}}</td>
+                     <td>{{consulta.Cor}}</td>
                 </tr>
-              {% endfor %}
             </tbody>
     </table>
     <div class="container mt-4">
       <div class="row">
           <div class="col-md-6">
-              <a href="{% url 'workinator:AtualizaProfissionalSaude' %}" class="btn btn-secondary">Editar Perfil</a>
-              <a href="{% url 'workinator:DeleteProfissionalSaude' %}" class="btn btn-danger">Excluir Perfil</a>
+              <a href="{% url 'workinator:AtualizaConsulta' %}" class="btn btn-secondary">Editar Consulta</a>
+              <a href="{% url 'workinator:DeleteConsulta' %}" class="btn btn-danger">Excluir Consulta</a>
           </div>
           <div class="col-md-6">
-              <a href="{% url 'workinator:GetConsultasProfissional' %}" class="btn btn-warning">Voltar</a>
+              <a href="{% url 'workinator:GetConsulta' %}" class="btn btn-warning">Voltar</a>
           </div>
       </div>
     </div>
